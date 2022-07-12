@@ -17,6 +17,8 @@ This repository includes code for:
 Additionally, this repository includes two prostate MR-US pairs for testing the code, as well as pretrained segmentation and registration models. Unfortunately, no additional data can be made available due to regulatory constrains.
  
 For prostate lesion detection, please refer to this repository: [https://github.com/OscarPellicer/prostate_lesion_detection](https://github.com/OscarPellicer/prostate_lesion_detection)
+
+**If you use any of this code for your work, please cite the PhD thesis and/or any of the publications above**
  
 ## Overview
 This repository contains three main Jupyter Notebooks:
@@ -53,23 +55,33 @@ Since `itkwidgets` does not support Jupyter Lab 3 at the momment, Jupyter Notebo
 ## Installation
 To install, please clone this repository and install required packages. It is recommended to use a package manager such as pip or conda (conda was the only one tested, so use pip at your own risk). If not sure, you can download and install the [latest miniconda release](https://docs.conda.io/en/latest/miniconda.html) before continuing.
 
-You probably want to create an environment first. Using conda:
+At this point, you can install everything manually or use the frozen package list in `conda_env.yaml`.
+
+### Option 1: Manual installation
 ```bash
+# You probably want to create an environment first. Using conda:
 conda create -n prostate_dl python=3.8
 conda activate prostate_dl
-```
 
-Install required libraries using `conda` when possible:
-```bash
+# Install required libraries using conda when possible:
 conda install matplotlib numpy ipywidgets ipython scipy pandas jupyter jupyterlab>3 ipython scikit-learn scikit-image seaborn
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 tensorboard>1.15 -c pytorch
+conda install -c pytorch pytorch torchvision torchaudio cudatoolkit=11.3 tensorboard>1.15
 conda install -c conda-forge pytorch-lightning>1 cupy pyvista pygalmesh=0.9.7 meshio pydicom tqdm itkwidgets torchinfo torchio
-conda install SimpleITK -c simpleitk
+conda install -c simpleitk SimpleITK
 conda install -c open3d-admin open3d
 pip install probreg
 ```
 
-Install git and clone this repeository
+### Option 2: Froze package list
+Simply use the `conda_env.yaml` package list.
+```bash
+conda env create -f conda_env.yaml
+conda activate prostate_dl
+```
+
+Whatever option you choose, the following must be done manually:
+
+Install git and clone this repository
 ```bash
 conda install git
 cd ~
@@ -99,24 +111,26 @@ Some of the configurable parameters that can be edited in the Notebook are:
  - `fem_material= dict(material='neo-Hookean', density=str(1.), E=str(5000.), v=str(0.49))` FEM material properties
  
 Also, there are several parameters for the CPD and the interpolation (used when `USE_FEM= False`) that can be set as a list, and the Notebook will go over all configurations (used for grid-serching over the hyperparameter space). Set a single element within the list to avoid the grid-searching behavior:
- - `betas= [100.]` Beta CPD parameter.
- - `lambdas= [3.3]` Lambda CPD parameter
+ - `betas= [100.]` Beta CPD parameter. It defines the model of the smoothness regularizer (width of smoothing Gaussian filter).
+ - `lambdas= [3.3]` Lambda CPD parameter. It represents the trade-off between the goodness of maximum likelihood fit and regularization.
  - `all_kernels= ['thin_plate_spline']` Interpolation kernel, best results are achieved with either 'linear' or 'thin_plate_spline'. See [RBFInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RBFInterpolator.html) for more possible kernels and interpolation parameters.
  - `epsilons= [100.]` Interpolation kernel scale.  Not used for kernels 'thin_plate_spline', 'linear', or 'cubic'. See [RBFInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RBFInterpolator.html)
 
 ### [ModelTraining](git_ModelTraining.ipynb)
 This Notebook trains either a segmentation or a registration (DDF prediction) model, (or loads a pretrained model), evaluates it on test images, and plots the results. To choose one model or the other, change the `PROBLEM` variable within the Notebook to one of:
- - 'SEG_MR': Prostate MR segmentation problem
- - 'DDF': 'Dense deformation field estimation problem from MR / US pairs with corresponding prostate masks'
+ - `'SEG_MR'`: Prostate MR segmentation problem
+ - `'DDF'`: 'Dense deformation field estimation problem from MR / US pairs with corresponding prostate masks'
  
 By choosing either one (or whatever new custom problems you define) much of the configuration will change in the rest of the Notebook. By default, the backend for both models will be the VNETLight module from [Medzoo](https://github.com/black0017/MedicalZooPytorch/blob/master/lib/medzoo/Vnet.py). Only two modifications were made to this module: batch normalization was replaced by instance normalization (i.e. with instance normalization, standarization is applied instance-wise and channel-wise, instead of being batch-wide), and the PReLU activation function was used (which is just like a ReLU, but the slope is learned channel-wise).
 
 **Prostate segmentation**
-By default he Notebook has been set up to train a basic segmentation model on the [Promise12](https://promise12.grand-challenge.org/) dataset. Please, download the data and update this variable within the notebook `data_path= 'D:/oscar/Prostate Images/Promise12/Train'` to proint to where the Promise12 training data is located.
+
+By default he Notebook has been set up to train a basic segmentation model on the [Promise12](https://promise12.grand-challenge.org/) dataset. Please, download the data and update this variable within the notebook `data_path= 'D:/oscar/Prostate Images/Promise12/Train'` to point to where the Promise12 training data is located.
 
 If you want to use pretrained weights, set `LOAD_NAME` variable to the path where the weights are stored. Unfortunately, no weights are provided for MR prostate segmentation, but they can be computed by training on Promise12 for instance.
 
 **Prostate registration**
+
 If `PROBLEM= DDF`, please set `TRAIN= False` and `BLIND_PREDICT= True` (unless you provide your own training data). Then download the pretrained registration weights from [here](https://drive.google.com/drive/folders/1A1-wkRBK0CP8Vh-iPKeuIjZXDEaBl42D) and save them into a `weights` folder in root path. Then run the Notebook to evaluate it on the two patient examples provided in this repository. Please note that both previous Notebooks should have been run to produce the intermediate files that are needed to evaulate the registration network, and in particual, [RegistrationMeshing](git_RegistrationMeshing.ipynb) Notebook should have been run twice setting `USE_FEM= True` and `USE_FEM= False` to have both references to compare with (or use the files already provided in this repository).
 
 ## Contact
