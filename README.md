@@ -119,19 +119,19 @@ Also, there are several parameters for the CPD and the interpolation (used when 
 ### [ModelTraining](git_ModelTraining.ipynb)
 This Notebook trains either a segmentation or a registration (DDF prediction) model, (or loads a pretrained model), evaluates it on test images, and plots the results. To choose one model or the other, change the `PROBLEM` variable within the Notebook to one of:
  - `'SEG_MR'`: Prostate MR segmentation problem
- - `'DDF'`: 'Dense deformation field estimation problem from MR / US pairs with corresponding prostate masks'
+ - `'DDF'`: Dense deformation field estimation problem from MR / US pairs with corresponding prostate masks
  
-By choosing either one (or whatever new custom problems you define) much of the configuration will change in the rest of the Notebook. By default, the backend for both models will be the VNETLight module from [Medzoo](https://github.com/black0017/MedicalZooPytorch/blob/master/lib/medzoo/Vnet.py). Only two modifications were made to this module: batch normalization was replaced by instance normalization (i.e. with instance normalization, standarization is applied instance-wise and channel-wise, instead of being batch-wide), and the PReLU activation function was used (which is just like a ReLU, but the slope is learned channel-wise).
+By choosing either one (or whatever new custom problems you define) much of the configuration will change in the rest of the Notebook. By default, the backbone for both models will be the VNETLight module from [Medzoo](https://github.com/black0017/MedicalZooPytorch/blob/master/lib/medzoo/Vnet.py). Only two modifications were made to this module: batch normalization was replaced by instance normalization (i.e. with instance normalization, standarization is applied instance-wise and channel-wise, instead of being batch-wide), and the PReLU activation function was used (which is just like a ReLU, but the slope is learned channel-wise).
 
 **Prostate segmentation**
 
 By default he Notebook has been set up to train a basic segmentation model on the [Promise12](https://promise12.grand-challenge.org/) dataset. Please, download the data and update this variable within the notebook `data_path= 'D:/oscar/Prostate Images/Promise12/Train'` to point to where the Promise12 training data is located.
 
-If you want to use pretrained weights, set `LOAD_NAME` variable to the path where the weights are stored. Unfortunately, no weights are provided for MR prostate segmentation, but they can be computed by training on Promise12 for instance.
+If you want to use pretrained weights, set `LOAD_NAME` variable to the path where the weights are stored. Unfortunately, no weights are provided for MR prostate segmentation, but some basic segmentation weights can be obtained by training on Promise12 for instance.
 
 **Prostate registration**
 
-If `PROBLEM= DDF`, please set `TRAIN= False` and `BLIND_PREDICT= True` (unless you provide your own training data). Then download the pretrained registration weights from [here](https://drive.google.com/drive/folders/1A1-wkRBK0CP8Vh-iPKeuIjZXDEaBl42D) and save them into a `weights` folder in root path. Then run the Notebook to evaluate it on the two patient examples provided in this repository. Please note that both previous Notebooks should have been run to produce the intermediate files that are needed to evaulate the registration network, and in particual, [RegistrationMeshing](git_RegistrationMeshing.ipynb) Notebook should have been run twice setting `USE_FEM= True` and `USE_FEM= False` to have both references to compare with (or use the files already provided in this repository).
+If `PROBLEM= 'DDF'`, please set `TRAIN= False` and `BLIND_PREDICT= True` (unless you provide your own training data). Then download the pretrained registration weights from [here](https://drive.google.com/drive/folders/1A1-wkRBK0CP8Vh-iPKeuIjZXDEaBl42D) and save them into a `weights` folder in root path. Then run the Notebook to evaluate it on the two patient examples provided in this repository. Please note that both previous Notebooks should have been run to produce the intermediate files that are needed to evaulate the registration network, and in particual, [RegistrationMeshing](git_RegistrationMeshing.ipynb) Notebook should have been run twice setting `USE_FEM= True` and `USE_FEM= False` to have both references to compare with (or use the files already provided in this repository).
 
 ## Contact
 If you have any problems, please check further instructions in each of the provided Notebooks, create a new Issue, or directly email me at Oscar.Pellicer at uv.es
