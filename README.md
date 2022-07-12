@@ -72,7 +72,7 @@ conda install -c open3d-admin open3d
 pip install probreg
 ```
 
-### Option 2: Froze package list
+### Option 2: Frozen package list
 Simply use the `conda_env.yaml` package list.
 ```bash
 conda env create -f conda_env.yaml
