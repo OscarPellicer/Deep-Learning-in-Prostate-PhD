@@ -1,5 +1,5 @@
 # Deep Learning in Prostate
-Code for the PhD Thesis of Oscar J. Pellicer-Valero, [Contributions of biomechanical modeling and machine learning to the automatic registration of Multiparametric Magnetic Resonance and Transrectal Echography for prostate brachytherapy]() (*not yet available*).
+Code for the PhD Thesis of Oscar J. Pellicer-Valero, [Contributions of biomechanical modeling and machine learning to the automatic registration of Multiparametric Magnetic Resonance and Transrectal Echography for prostate brachytherapy](https://roderic.uv.es/handle/10550/84511).
 It employs several Artificial Intelligence (AI) algorithms to analyze Magnetic Resonance (MR) and Ultrasound (US) images of the prostate and thereby improve the efficiency and accuracy in diagnosis, biopsy and treatment of prostate cancer. 
 
 The PhD compiles the work developed in the following publications:
