@@ -133,5 +133,8 @@ If you want to use pretrained weights, set `LOAD_NAME` variable to the path wher
 
 If `PROBLEM= 'DDF'`, please set `TRAIN= False` and `BLIND_PREDICT= True` (unless you provide your own training data). Then download the pretrained registration weights from [here](https://drive.google.com/drive/folders/1A1-wkRBK0CP8Vh-iPKeuIjZXDEaBl42D) and save them into a `weights` folder in root path. Then run the Notebook to evaluate it on the two patient examples provided in this repository. Please note that both previous Notebooks should have been run to produce the intermediate files that are needed to evaulate the registration network, and in particual, [RegistrationMeshing](git_RegistrationMeshing.ipynb) Notebook should have been run twice setting `USE_FEM= True` and `USE_FEM= False` to have both references to compare with (or use the files already provided in this repository).
 
+## Rights of use
+This software is in principle intended for research purposes and non-commercial use. If you intend to use it otherwise, please reach me at Oscar.Pellicer at uv.es
+
 ## Contact
 If you have any problems, please check further instructions in each of the provided Notebooks, create a new Issue, or directly email me at Oscar.Pellicer at uv.es
